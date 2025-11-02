@@ -28,29 +28,25 @@ body {
   padding: 28px;
 }
 
+/* ---------- Sidebar ---------- */
 .sidebar {
-  width: 260px;
-  border-left: 1px solid rgba(46,93,59,0.08);
+  width: 240px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: var(--bg);
-  transition: right 0.25s ease;
+  border-left: 1px solid rgba(46, 93, 59, 0.1);
 }
 
 .logo {
-  width: 90px; /* 🔹 más pequeño */
-  height: 90px;
+  width: 100px;
+  height: auto;
   object-fit: contain;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  background: #fff;
-  padding: 8px;
+  margin-bottom: 16px;
 }
 
 .menu {
-  margin-top: 18px;
   width: 100%;
 }
 
@@ -63,48 +59,39 @@ body {
   border: none;
   cursor: pointer;
   border-radius: 8px;
+  color: var(--green);
+  font-size: 15px;
+  transition: background 0.2s;
+}
+
+.menu button:hover {
+  background: rgba(46, 93, 59, 0.08);
 }
 
 .menu button.active {
-  background: rgba(46,93,59,0.06);
-}
-
-.btn {
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
-
-.btn.green {
-  background: var(--green);
-  color: #fff;
-}
-
-.btn.ghost {
-  background: transparent;
-  border: 1px solid rgba(46,93,59,0.12);
+  background: rgba(46, 93, 59, 0.15);
 }
 
 .small {
   font-size: 13px;
-  color: rgba(46,93,59,0.8);
+  color: rgba(46, 93, 59, 0.8);
 }
 
-/* 🔹 Botón hamburguesa */
+/* ---------- Hamburger Button ---------- */
 .hamburger {
   position: fixed;
   top: 16px;
-  left: 16px;
-  z-index: 200;
-  width: 36px;
-  height: 28px;
+  right: 16px;
+  z-index: 100;
+  width: 38px;
+  height: 30px;
   display: none;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   background: transparent;
   border: none;
   cursor: pointer;
+  padding: 0;
 }
 
 .hamburger span {
@@ -112,9 +99,10 @@ body {
   height: 3px;
   background: var(--green);
   border-radius: 3px;
+  transition: all 0.3s ease;
 }
 
-/* 🔹 Vista móvil */
+/* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .hamburger {
     display: flex;
@@ -123,16 +111,16 @@ body {
   .sidebar {
     position: fixed;
     top: 0;
-    left: -280px;
-    height: 100vh;
+    right: -280px;
     width: 260px;
-    box-shadow: 4px 0 18px rgba(0,0,0,0.15);
-    z-index: 150;
-    transition: left 0.25s ease;
+    height: 100vh;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.15);
+    transition: right 0.3s ease;
+    z-index: 95;
   }
 
   .sidebar.open {
-    left: 0;
+    right: 0;
   }
 
   .main {
