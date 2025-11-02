@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function Sidebar({ user, logout }) {
+export default function Sidebar({ user, role, logout }) {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
 
@@ -13,7 +13,7 @@ export default function Sidebar({ user, logout }) {
   return (
     <>
       {/* 🔘 BOTÓN HAMBURGUESA (solo visible en móvil) */}
-      <button className="hamburger" onClick={() => setOpen(!open)}>
+      <button className={`hamburger ${open ? 'active' : ''}`} onClick={() => setOpen(!open)}>
         <span></span>
         <span></span>
         <span></span>
