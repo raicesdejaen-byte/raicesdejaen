@@ -1,53 +1,50 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Menu, X } from 'lucide-react' // ⬅️ Iconos del menú
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar({ user, role, logout }) {
-  const [open, setOpen] = useState(false)
-  const navigate = useNavigate()
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const go = (path) => {
-    navigate(path)
-    setOpen(false)
-  }
+    navigate(path);
+    setOpen(false); // cierra el menú en móvil al navegar
+  };
 
   return (
     <>
-      {/* 🔘 Botón Hamburguesa (solo visible en móvil) */}
+      {/* 🔘 Botón hamburguesa visible solo en móvil */}
       <button
-        className="fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md md:hidden"
+        className={`hamburger ${open ? 'active' : ''}`}
         onClick={() => setOpen(!open)}
       >
-        {open ? <X size={24} /> : <Menu size={24} />}
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
 
       {/* 🧭 Menú lateral */}
-      <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-xl flex flex-col p-4 transform transition-transform duration-300 z-40
-        ${open ? 'translate-x-0' : '-translate-x-full'}
-        md:translate-x-0 md:static md:shadow-none`}
-      >
-        <img src="/logo.png" alt="logo" className="w-32 mx-auto mb-6" />
+      <aside className={`sidebar ${open ? 'open' : ''}`}>
+        <img src="/logo.png" alt="logo" className="logo" />
 
-        <div className="flex flex-col gap-3">
-          <button className="text-left" onClick={() => go('/')}>Inicio</button>
-          <button className="text-left" onClick={() => go('/socios')}>Socios</button>
-          <button className="text-left" onClick={() => go('/inventario')}>Inventario</button>
-          <button className="text-left" onClick={() => go('/monedero')}>Monedero</button>
+        <div className="menu">
+          <button onClick={() => go('/')}>Inicio</button>
+          <button onClick={() => go('/socios')}>Socios</button>
+          <button onClick={() => go('/inventario')}>Inventario</button>
+          <button onClick={() => go('/monedero')}>Monedero</button>
         </div>
 
         {user && (
-          <div className="mt-auto pt-4 border-t border-gray-200">
-            <p className="text-sm text-gray-500">{user.email}</p>
-            <button
-              className="mt-2 text-sm text-red-600 hover:underline"
-              onClick={logout}
-            >
+          <div style={{ marginTop: 'auto' }}>
+            <p className="small">{user.email}</p>
+            <button className="btn ghost" onClick={logout}>
               Cerrar sesión
             </button>
           </div>
         )}
       </aside>
+
+      {/* Fondo semitransparente para cerrar el menú al hacer clic fuera */}
+      {open && <div className="overlay" onClick={() => setOpen(false)}></div>}
     </>
-  )
+  );
 }
