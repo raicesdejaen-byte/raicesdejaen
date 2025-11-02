@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export default function Sidebar({ user, role, logout }) {
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+export default function Sidebar({ user, logout }) {
+  const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
 
   const go = (path) => {
-    navigate(path);
-    setOpen(false); // cierra el menú al navegar en móvil
-  };
+    navigate(path)
+    setOpen(false)
+  }
 
   return (
     <>
       {/* 🔘 BOTÓN HAMBURGUESA (solo visible en móvil) */}
-      <button
-        className={`hamburger ${open ? 'active' : ''}`}
-        onClick={() => setOpen(!open)}
-      >
+      <button className="hamburger" onClick={() => setOpen(!open)}>
         <span></span>
         <span></span>
         <span></span>
@@ -41,5 +38,5 @@ export default function Sidebar({ user, role, logout }) {
         )}
       </aside>
     </>
-  );
+  )
 }
