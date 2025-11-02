@@ -1,62 +1,42 @@
-// src/components/Sidebar.jsx
 import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function Sidebar({ user, role, logout }) {
   const [open, setOpen] = useState(false)
-  const location = useLocation()
+  const navigate = useNavigate()
 
-  const links = [
-    { to: '/', label: 'Inicio' },
-    { to: '/socios', label: 'Socios' },
-    { to: '/inventario', label: 'Inventario' },
-    { to: '/monedero', label: 'Monedero' },
-  ]
-
-  const handleLinkClick = () => {
-    // si estamos en móvil, cerramos el sidebar al pulsar enlace
-    if (window.innerWidth <= 900) setOpen(false)
+  const go = (path) => {
+    navigate(path)
+    setOpen(false) // cierra el menú en móvil al navegar
   }
 
   return (
     <>
-      {/* Botón hamburguesa (visible en móvil) */}
-      <button
-        className={`hamburger ${open ? 'is-open' : ''}`}
-        aria-label="Abrir menú"
-        onClick={() => setOpen(s => !s)}
-      >
-        <span />
-        <span />
-        <span />
+      {/* 🔘 BOTÓN HAMBURGUESA (solo visible en móvil) */}
+      <button className="hamburger" onClick={() => setOpen(!open)}>
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
 
-      {/* Sidebar */}
-      <aside className={`sidebar ${open ? 'open' : ''}`} aria-hidden={!open && window.innerWidth <= 900}>
-        <img src="/raicesdejaen.jpg" alt="logo" className="logo" />
+      {/* 🧭 MENÚ LATERAL */}
+      <aside className={`sidebar ${open ? 'open' : ''}`}>
+        <img src="/logo.png" alt="logo" className="logo" />
 
-        <nav className="menu">
-          {links.map(l => (
-            <Link key={l.to} to={l.to} onClick={() => { handleLinkClick(); }}>
-              <button className={location.pathname === l.to ? 'active' : ''}>{l.label}</button>
-            </Link>
-          ))}
-        </nav>
-
-        <div style={{ marginTop: 'auto', width: '100%', textAlign: 'center' }}>
-          {user ? (
-            <div className="small">
-              <div style={{ fontWeight: 700 }}>{user.email} {role ? `(${role})` : ''}</div>
-              <button className="btn ghost" style={{ marginTop: 8 }} onClick={() => { setOpen(false); logout(); }}>Cerrar sesión</button>
-            </div>
-          ) : (
-            <div className="small">No conectado</div>
-          )}
+        <div className="menu">
+          <button onClick={() => go('/')}>Inicio</button>
+          <button onClick={() => go('/socios')}>Socios</button>
+          <button onClick={() => go('/inventario')}>Inventario</button>
+          <button onClick={() => go('/monedero')}>Monedero</button>
         </div>
-      </aside>
 
-      {/* Overlay semitransparente en móvil cuando el menú está abierto */}
-      <div className={`sidebar-overlay ${open ? 'visible' : ''}`} onClick={() => setOpen(false)} />
+        {user && (
+          <div style={{ marginTop: 'auto' }}>
+            <p className="small">{user.email}</p>
+            <button className="btn ghost" onClick={logout}>Cerrar sesión</button>
+          </div>
+        )}
+      </aside>
     </>
   )
 }
