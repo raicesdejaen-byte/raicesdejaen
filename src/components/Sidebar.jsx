@@ -7,12 +7,12 @@ export default function Sidebar({ user, role, logout }) {
 
   const go = (path) => {
     navigate(path);
-    setOpen(false); // cierra el menú en móvil al navegar
+    setOpen(false); // cierra el menú al navegar en móvil
   };
 
   return (
     <>
-      {/* 🔘 Botón hamburguesa visible solo en móvil */}
+      {/* 🔘 BOTÓN HAMBURGUESA (solo visible en móvil) */}
       <button
         className={`hamburger ${open ? 'active' : ''}`}
         onClick={() => setOpen(!open)}
@@ -22,7 +22,7 @@ export default function Sidebar({ user, role, logout }) {
         <span></span>
       </button>
 
-      {/* 🧭 Menú lateral */}
+      {/* 🧭 MENÚ LATERAL */}
       <aside className={`sidebar ${open ? 'open' : ''}`}>
         <img src="/logo.png" alt="logo" className="logo" />
 
@@ -36,15 +36,10 @@ export default function Sidebar({ user, role, logout }) {
         {user && (
           <div style={{ marginTop: 'auto' }}>
             <p className="small">{user.email}</p>
-            <button className="btn ghost" onClick={logout}>
-              Cerrar sesión
-            </button>
+            <button className="btn ghost" onClick={logout}>Cerrar sesión</button>
           </div>
         )}
       </aside>
-
-      {/* Fondo semitransparente para cerrar el menú al hacer clic fuera */}
-      {open && <div className="overlay" onClick={() => setOpen(false)}></div>}
     </>
   );
 }
