@@ -1,6 +1,6 @@
 :root {
-  --bg: #f9f3e5; /* crema */
-  --green: #2e5d3b; /* verde oscuro */
+  --bg: #f9f3e5;
+  --green: #2e5d3b;
 }
 
 * {
@@ -29,28 +29,29 @@ body {
 }
 
 .sidebar {
-  width: 260px;
+  width: 240px;
   border-left: 1px solid rgba(46,93,59,0.08);
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: var(--bg);
+  transition: right 0.25s ease;
 }
 
-/* 🖼️ Logo */
+/* Logo */
 .logo {
-  width: 100px;
+  width: 80px;
   height: auto;
   object-fit: contain;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   background: #fff;
-  padding: 8px;
-  margin-bottom: 10px;
+  padding: 6px;
+  margin-bottom: 16px;
 }
 
 .menu {
-  margin-top: 18px;
   width: 100%;
 }
 
@@ -63,35 +64,11 @@ body {
   border: none;
   cursor: pointer;
   border-radius: 8px;
+  color: var(--green);
 }
 
 .menu button.active {
   background: rgba(46,93,59,0.06);
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.card {
-  background: #fff;
-  padding: 14px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th, .table td {
-  padding: 8px 10px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  text-align: left;
 }
 
 .btn {
@@ -111,39 +88,19 @@ body {
   border: 1px solid rgba(46,93,59,0.12);
 }
 
-.form-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.thumbnail {
-  width: 48px;
-  height: 48px;
-  border-radius: 6px;
-  object-fit: cover;
-}
-
 .small {
   font-size: 13px;
   color: rgba(46,93,59,0.8);
 }
 
-.notice {
-  background: rgba(255,248,220,1);
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-}
-
-/* ---------- Sidebar responsive / hamburger ---------- */
+/* ---------- Botón hamburguesa ---------- */
 .hamburger {
   position: fixed;
   top: 14px;
-  right: 14px;
+  left: 14px;
   z-index: 100;
-  width: 40px;
-  height: 32px;
+  width: 36px;
+  height: 30px;
   display: none;
   flex-direction: column;
   justify-content: space-around;
@@ -158,7 +115,18 @@ body {
   height: 3px;
   background: var(--green);
   border-radius: 3px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Animación hamburguesa */
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translateY(8px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-8px);
 }
 
 /* ---------- Responsive ---------- */
@@ -170,22 +138,25 @@ body {
   .sidebar {
     position: fixed;
     top: 0;
-    right: -280px;
-    width: 260px;
+    left: -260px;
     height: 100vh;
-    box-shadow: -8px 0 24px rgba(0,0,0,0.15);
-    transition: right 0.25s ease;
+    width: 240px;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    transition: left 0.25s ease;
     z-index: 95;
-    background: var(--bg);
-    padding: 20px;
   }
 
   .sidebar.open {
-    right: 0;
+    left: 0;
   }
 
-  .logo {
-    width: 80px;
-    margin-bottom: 6px;
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.3);
+    z-index: 90;
   }
 }
