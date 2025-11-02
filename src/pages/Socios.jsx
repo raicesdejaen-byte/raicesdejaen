@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { db, storage } from '../firebase'
-import { collection, addDoc, getDocs, doc, deleteDoc } from 'firebase/firestore'
+import { collection, addDoc, getDocs } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 export default function Socios({ user, role }) {
   const [list, setList] = useState([])
   const [showForm, setShowForm] = useState(false)
-  const [selected, setSelected] = useState(null) // 👈 nuevo: socio seleccionado para ver detalle
+  const [selected, setSelected] = useState(null)
+  const [searchNum, setSearchNum] = useState('')
+  const [searchDni, setSearchDni] = useState('')
   const [form, setForm] = useState({
     numeroSocio: '',
     nombre: '',
@@ -23,7 +25,10 @@ export default function Socios({ user, role }) {
 
   const fetchList = async () => {
     const snap = await getDocs(collection(db, 'socios'))
-    setList(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+    const data = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    // 🔢 Ordenar por número de socio
+    data.sort((a, b) => (a.numeroSocio || 0) - (b.numeroSocio || 0))
+    setList(data)
   }
 
   const getNextSocioNumber = async () => {
@@ -63,17 +68,35 @@ export default function Socios({ user, role }) {
     fetchList()
   }
 
-  const remove = async (s) => {
-    if (role !== 'admin') { alert('Acceso denegado'); return }
-    await deleteDoc(doc(db, 'socios', s.id))
-    fetchList()
-  }
+  // 🔍 Filtrado por número de socio y DNI
+  const filteredList = list.filter(s =>
+    (searchNum === '' || String(s.numeroSocio).includes(searchNum)) &&
+    (searchDni === '' || s.dni?.toLowerCase().includes(searchDni.toLowerCase()))
+  )
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
         <h3>Socios</h3>
         {role === 'admin' && <button className="btn green" onClick={() => setShowForm(true)}>Nuevo socio</button>}
+      </div>
+
+      {/* 🔎 Buscadores */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 12 }}>
+        <input
+          type="text"
+          placeholder="Buscar por Nº de socio..."
+          value={searchNum}
+          onChange={e => setSearchNum(e.target.value)}
+          style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
+        />
+        <input
+          type="text"
+          placeholder="Buscar por DNI..."
+          value={searchDni}
+          onChange={e => setSearchDni(e.target.value)}
+          style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
+        />
       </div>
 
       <div className="card">
@@ -91,7 +114,7 @@ export default function Socios({ user, role }) {
             </tr>
           </thead>
           <tbody>
-            {list.map(s => (
+            {filteredList.map(s => (
               <tr key={s.id}>
                 <td>
                   {s.fotoURL ? (
@@ -104,9 +127,8 @@ export default function Socios({ user, role }) {
                 <td>{s.telefono}</td>
                 <td>{s.fechaInscripcion}</td>
                 <td>{s.saldo}</td>
-                <td style={{ display: 'flex', gap: '6px' }}>
+                <td>
                   <button className="btn ghost" onClick={() => setSelected(s)}>Ver detalle</button>
-                  {role === 'admin' && <button className="btn red" onClick={() => remove(s)}>Eliminar</button>}
                 </td>
               </tr>
             ))}
