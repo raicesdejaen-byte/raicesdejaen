@@ -26,7 +26,6 @@ export default function Socios({ user, role }) {
   const fetchList = async () => {
     const snap = await getDocs(collection(db, 'socios'))
     const data = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-    // 🔢 Ordenar por número de socio
     data.sort((a, b) => (a.numeroSocio || 0) - (b.numeroSocio || 0))
     setList(data)
   }
@@ -68,7 +67,6 @@ export default function Socios({ user, role }) {
     fetchList()
   }
 
-  // 🔍 Filtrado por número de socio y DNI
   const filteredList = list.filter(s =>
     (searchNum === '' || String(s.numeroSocio).includes(searchNum)) &&
     (searchDni === '' || s.dni?.toLowerCase().includes(searchDni.toLowerCase()))
@@ -119,7 +117,9 @@ export default function Socios({ user, role }) {
                 <td>
                   {s.fotoURL ? (
                     <img src={s.fotoURL} alt="" style={{ width: 50, height: 50, borderRadius: '50%', objectFit: 'cover' }} />
-                  ) : '—'}
+                  ) : (
+                    <img src="/default-photo.png" alt="" style={{ width: 50, height: 50, borderRadius: '50%', opacity: 0.6 }} />
+                  )}
                 </td>
                 <td>{s.numeroSocio}</td>
                 <td>{s.nombre} {s.apellidos}</td>
@@ -136,69 +136,61 @@ export default function Socios({ user, role }) {
         </table>
       </div>
 
-      {/* FORMULARIO NUEVO SOCIO */}
-{showForm && (
-  <div className="modal-overlay" onClick={() => setShowForm(false)}>
-    <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-      <button className="modal-close" onClick={() => setShowForm(false)}>✖</button>
-      <h4>Nuevo socio</h4>
-      <input placeholder="Número de socio (vacío = automático)" value={form.numeroSocio}
-        onChange={e => setForm({ ...form, numeroSocio: e.target.value })} /><br />
-      <input placeholder="Nombre" value={form.nombre}
-        onChange={e => setForm({ ...form, nombre: e.target.value })} /><br />
-      <input placeholder="Apellidos" value={form.apellidos}
-        onChange={e => setForm({ ...form, apellidos: e.target.value })} /><br />
-      <input placeholder="DNI" value={form.dni}
-        onChange={e => setForm({ ...form, dni: e.target.value })} /><br />
-      <input placeholder="Teléfono" value={form.telefono}
-        onChange={e => setForm({ ...form, telefono: e.target.value })} /><br />
-      <input placeholder="Fecha inscripción (YYYY-MM-DD)" value={form.fechaInscripcion}
-        onChange={e => setForm({ ...form, fechaInscripcion: e.target.value })} /><br />
-      <input placeholder="Avalador" value={form.avalador}
-        onChange={e => setForm({ ...form, avalador: e.target.value })} /><br />
-      <input placeholder="Saldo" value={form.saldo}
-        onChange={e => setForm({ ...form, saldo: e.target.value })} /><br />
-      <input type="file" accept="image/*"
-        onChange={e => setForm({ ...form, foto: e.target.files[0] })} /><br />
-      <div style={{ marginTop: 8 }}>
-        <button className="btn green" onClick={save}>Guardar</button>
-        <button className="btn ghost" onClick={() => setShowForm(false)}>Cancelar</button>
-      </div>
-    </div>
-  </div>
-)}
+      {/* ✅ FORMULARIO NUEVO SOCIO */}
+      {showForm && (
+        <>
+          <div className="modal-overlay" onClick={() => setShowForm(false)}></div>
+          <div className="modal">
+            <h4>Nuevo socio</h4>
+            <input placeholder="Número de socio (vacío = automático)" value={form.numeroSocio}
+              onChange={e => setForm({ ...form, numeroSocio: e.target.value })} /><br />
+            <input placeholder="Nombre" value={form.nombre}
+              onChange={e => setForm({ ...form, nombre: e.target.value })} /><br />
+            <input placeholder="Apellidos" value={form.apellidos}
+              onChange={e => setForm({ ...form, apellidos: e.target.value })} /><br />
+            <input placeholder="DNI" value={form.dni}
+              onChange={e => setForm({ ...form, dni: e.target.value })} /><br />
+            <input placeholder="Teléfono" value={form.telefono}
+              onChange={e => setForm({ ...form, telefono: e.target.value })} /><br />
+            <input placeholder="Fecha inscripción (YYYY-MM-DD)" value={form.fechaInscripcion}
+              onChange={e => setForm({ ...form, fechaInscripcion: e.target.value })} /><br />
+            <input placeholder="Avalador" value={form.avalador}
+              onChange={e => setForm({ ...form, avalador: e.target.value })} /><br />
+            <input placeholder="Saldo" value={form.saldo}
+              onChange={e => setForm({ ...form, saldo: e.target.value })} /><br />
+            <input type="file" accept="image/*"
+              onChange={e => setForm({ ...form, foto: e.target.files[0] })} /><br />
+            <div style={{ marginTop: 8 }}>
+              <button className="btn green" onClick={save}>Guardar</button>
+              <button className="btn ghost" onClick={() => setShowForm(false)}>Cancelar</button>
+            </div>
+          </div>
+        </>
+      )}
 
-{/* MODAL DETALLE SOCIO */}
-{selected && (
-  <>
-    <div className="modal-overlay" onClick={() => setSelected(null)}></div>
-    <div className="modal">
-      <button onClick={() => setSelected(null)} style={{
-        position: 'absolute', right: 10, top: 10, border: 'none',
-        background: 'transparent', fontSize: 18, cursor: 'pointer'
-      }}>✖</button>
-      <img
-        src={selected.fotoURL || '/no-photo.png'}
-        alt=""
-        style={{
-          width: 150,
-          height: 150,
-          borderRadius: '50%',
-          objectFit: 'cover',
-          marginBottom: 10
-        }}
-      />
-      <h3>{selected.nombre} {selected.apellidos}</h3>
-      <p><b>Nº Socio:</b> {selected.numeroSocio}</p>
-      <p><b>DNI:</b> {selected.dni}</p>
-      <p><b>Teléfono:</b> {selected.telefono}</p>
-      <p><b>Fecha Inscripción:</b> {selected.fechaInscripcion}</p>
-      <p><b>Avalador:</b> {selected.avalador}</p>
-      <p><b>Saldo:</b> {selected.saldo} €</p>
-      <div style={{ marginTop: 12 }}>
-        <button className="btn ghost" onClick={() => setSelected(null)}>Cerrar</button>
-      </div>
+      {/* ✅ MODAL DETALLE SOCIO */}
+      {selected && (
+        <>
+          <div className="modal-overlay" onClick={() => setSelected(null)}></div>
+          <div className="modal">
+            <button onClick={() => setSelected(null)} style={{
+              position: 'absolute', right: 10, top: 10, border: 'none', background: 'transparent', fontSize: 18, cursor: 'pointer'
+            }}>✖</button>
+            <img src={selected.fotoURL || '/default-photo.png'} alt=""
+              style={{ width: 150, height: 150, borderRadius: '50%', objectFit: 'cover', marginBottom: 10 }} />
+            <h3>{selected.nombre} {selected.apellidos}</h3>
+            <p><b>Nº Socio:</b> {selected.numeroSocio}</p>
+            <p><b>DNI:</b> {selected.dni}</p>
+            <p><b>Teléfono:</b> {selected.telefono}</p>
+            <p><b>Fecha Inscripción:</b> {selected.fechaInscripcion}</p>
+            <p><b>Avalador:</b> {selected.avalador}</p>
+            <p><b>Saldo:</b> {selected.saldo} €</p>
+            <div style={{ marginTop: 12 }}>
+              <button className="btn ghost" onClick={() => setSelected(null)}>Cerrar</button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
-  </>
-)}
-
+  )
+}
