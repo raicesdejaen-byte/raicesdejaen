@@ -144,3 +144,43 @@ body {
     padding: 20px;
   }
 }
+/* --- MODALES (ventanas emergentes) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6); /* más oscuro, para ver el modal claramente */
+  backdrop-filter: blur(2px);
+  z-index: 2000; /* encima de todo */
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff; /* fondo blanco */
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  z-index: 2100; /* aún más alto */
+}
+
+/* Si tienes botones dentro del modal */
+.modal button {
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal button:hover {
+  background: #244a2f;
+}
