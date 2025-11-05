@@ -13,7 +13,6 @@ export default function Monedero({ user, role }) {
   const fetchSocios = async () => {
     const snap = await getDocs(collection(db, 'socios'))
     const data = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-    // ordenar por número de socio
     data.sort((a, b) => (a.numeroSocio || 0) - (b.numeroSocio || 0))
     setSocios(data)
   }
@@ -28,7 +27,6 @@ export default function Monedero({ user, role }) {
     fetchSocios()
   }
 
-  // Filtrar por número de socio
   const filtered = socios.filter(s =>
     s.numeroSocio?.toString().toLowerCase().includes(search.toLowerCase())
   )
@@ -63,7 +61,7 @@ export default function Monedero({ user, role }) {
                 <td>
                   {s.fotoURL
                     ? <img src={s.fotoURL} alt="" style={{ width: 45, height: 45, borderRadius: '50%', objectFit: 'cover' }} />
-                    : '—'}
+                    : <img src="/default-photo.png" alt="" style={{ width: 45, height: 45, borderRadius: '50%', opacity: 0.6 }} />}
                 </td>
                 <td>{s.numeroSocio}</td>
                 <td>{s.nombre} {s.apellidos}</td>
@@ -79,14 +77,11 @@ export default function Monedero({ user, role }) {
         </table>
       </div>
 
-      {/* MODAL PARA EDITAR SALDO */}
+      {/* ✅ MODAL PARA EDITAR SALDO */}
       {selected && (
-        <div style={{
-          position: 'fixed', inset: 0,
-          background: 'rgba(0,0,0,0.5)',
-          display: 'flex', justifyContent: 'center', alignItems: 'center'
-        }}>
-          <div className="card" style={{ width: 300, textAlign: 'center', padding: 20, position: 'relative' }}>
+        <>
+          <div className="modal-overlay" onClick={() => setSelected(null)}></div>
+          <div className="modal">
             <button
               onClick={() => setSelected(null)}
               style={{
@@ -111,7 +106,7 @@ export default function Monedero({ user, role }) {
               <button className="btn ghost" onClick={() => setSelected(null)}>Cancelar</button>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )
