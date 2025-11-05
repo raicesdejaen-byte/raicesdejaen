@@ -37,8 +37,9 @@ body {
   flex-direction: column;
   align-items: center;
   background: var(--bg);
-  border-left: 1px solid rgba(46, 93, 59, 0.1);
+  border-right: 1px solid rgba(46, 93, 59, 0.1);
   transition: all 0.3s ease;
+  z-index: 100;
 }
 
 .logo {
@@ -70,21 +71,12 @@ body {
   background: rgba(46, 93, 59, 0.08);
 }
 
-.menu button.active {
-  background: rgba(46, 93, 59, 0.15);
-}
-
-.small {
-  font-size: 13px;
-  color: rgba(46, 93, 59, 0.8);
-}
-
 /* ---------- Botón Hamburguesa ---------- */
 .hamburger {
   position: fixed;
   top: 16px;
-  right: 16px;
-  z-index: 100;
+  left: 16px;
+  z-index: 200;
   width: 38px;
   height: 30px;
   display: none;
@@ -116,6 +108,17 @@ body {
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
+/* 🌙 Fondo oscuro detrás del menú */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 99;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .hamburger {
@@ -125,16 +128,16 @@ body {
   .sidebar {
     position: fixed;
     top: 0;
-    right: -260px;
+    left: -260px;
     width: 240px;
     height: 100vh;
-    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.15);
-    transition: right 0.3s ease;
-    z-index: 95;
+    background: var(--bg);
+    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.15);
+    transition: left 0.3s ease;
   }
 
   .sidebar.open {
-    right: 0;
+    left: 0;
   }
 
   .main {
