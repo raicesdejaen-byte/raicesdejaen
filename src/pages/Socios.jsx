@@ -170,10 +170,24 @@ export default function Socios({ user, role }) {
 
 {/* MODAL DETALLE SOCIO */}
 {selected && (
-  <div className="modal-overlay" onClick={() => setSelected(null)}>
-    <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-      <button className="modal-close" onClick={() => setSelected(null)}>✖</button>
-      <img src={selected.fotoURL || '/no-photo.png'} alt="Foto del socio" />
+  <>
+    <div className="modal-overlay" onClick={() => setSelected(null)}></div>
+    <div className="modal">
+      <button onClick={() => setSelected(null)} style={{
+        position: 'absolute', right: 10, top: 10, border: 'none',
+        background: 'transparent', fontSize: 18, cursor: 'pointer'
+      }}>✖</button>
+      <img
+        src={selected.fotoURL || '/no-photo.png'}
+        alt=""
+        style={{
+          width: 150,
+          height: 150,
+          borderRadius: '50%',
+          objectFit: 'cover',
+          marginBottom: 10
+        }}
+      />
       <h3>{selected.nombre} {selected.apellidos}</h3>
       <p><b>Nº Socio:</b> {selected.numeroSocio}</p>
       <p><b>DNI:</b> {selected.dni}</p>
@@ -185,5 +199,6 @@ export default function Socios({ user, role }) {
         <button className="btn ghost" onClick={() => setSelected(null)}>Cerrar</button>
       </div>
     </div>
-  </div>
+  </>
 )}
+
