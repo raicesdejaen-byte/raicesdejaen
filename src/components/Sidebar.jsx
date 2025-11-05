@@ -12,7 +12,7 @@ export default function Sidebar({ user, role, logout }) {
 
   return (
     <>
-      {/* 🔘 BOTÓN HAMBURGUESA (solo visible en móvil) */}
+      {/* 🔘 BOTÓN HAMBURGUESA */}
       <button className={`hamburger ${open ? 'active' : ''}`} onClick={() => setOpen(!open)}>
         <span></span>
         <span></span>
@@ -37,6 +37,9 @@ export default function Sidebar({ user, role, logout }) {
           </div>
         )}
       </aside>
+
+      {/* 🌙 FONDO OSCURO DETRÁS DEL MENÚ */}
+      {open && <div className="overlay" onClick={() => setOpen(false)}></div>}
     </>
   )
 }
